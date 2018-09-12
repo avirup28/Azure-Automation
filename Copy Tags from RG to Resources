@@ -1,0 +1,21 @@
+$ResourceGroups = Get-AzureRmResourceGroup
+ 
+ForEach ($ResourceGroup in $ResourceGroups) {
+ 
+    $Resources = Find-AzureRmResource
+    
+    ForEach ($Resource in $Resources){
+ 
+         $RGTags =  $ResourceGroup.Tags
+         $resourceTags = (Get-AzureRmResource -ResourceId $Resource.ResourceId).Tags
+ 
+            if ($resourceTags){
+                foreach ($key in $resourceTags.Keys){
+                    if (-not($RGTags.ContainsKey($key))){
+                        $RGTags.Add($key, $resourceTags[$key])
+                }
+            }
+        Set-AzureRmResource -Tag $RGTags -ResourceId $Resource.ResourceId -Force
+    }
+}	
+} 
