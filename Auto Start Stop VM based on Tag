@@ -1,0 +1,170 @@
+# Input Parameters for
+# VmAction:action to perform (Start or Stop)
+# VMAction parameter is Mandatory
+
+param(
+  [Parameter(Mandatory=$true)]
+  [string]$VMAction
+  )
+
+
+# Authenticating with Automation Account
+
+$connectionName = "AzureRunAsConnection" 
+try
+{
+    # Get the connection "AzureRunAsConnection "
+    $servicePrincipalConnection=Get-AutomationConnection -Name $connectionName         
+
+    "Logging in to Azure..."
+    Login-AzureRmAccount `
+        -ServicePrincipal `
+        -TenantId $servicePrincipalConnection.TenantId `
+        -ApplicationId $servicePrincipalConnection.ApplicationId `
+        -CertificateThumbprint $servicePrincipalConnection.CertificateThumbprint 
+
+}
+catch {
+    if (!$servicePrincipalConnection)
+    {
+        $ErrorMessage = "Connection $connectionName not found."
+        throw $ErrorMessage
+    } else{
+        Write-Error -Message $_.Exception
+        throw $_.Exception
+    }
+}
+
+
+<# 
+
+     Getting the Current time and date, Timezone is in CST
+     By Default, Sunday = 0 ; Monday = 1 ; ... ; Saturday = 6
+
+#>
+
+#Converting UTC timezone to CST
+
+
+$CSTZONE = [System.TimeZoneInfo]::FindSystemTimeZoneById("Central Standard Time")
+$CSTTIME = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $CSTZONE)
+
+
+#Reading Current Date and Time
+
+$CurrentDay = $CSTTIME.DayOfWeek.value__
+$CurrentTime = $CSTTIME.Hour
+
+
+#Defining Functions which will Start VM
+
+
+
+function StartVM_Monday_08AM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "5_1_17_08" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart)
+{
+ 
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+}
+}
+
+
+
+function StartVM_Saturday_10AM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "0_6_22_10" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart)
+{
+ 
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+}
+}
+
+
+
+#Defining Functions which will Stop VM
+
+
+function StopVM_Friday_05PM {
+
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "5_1_17_08" `
+-and $PSItem.PowerState -eq "VM running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+}  
+} 
+
+
+function StopVM_Sunday_10PM {
+
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "0_6_22_10" `
+-and $PSItem.PowerState -eq "VM running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+}  
+} 
+
+
+
+
+
+
+
+#Calling function to Start VM
+
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "1" -and $CurrentTime -eq "8") ) {
+
+StartVM_Monday_08AM
+}
+
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "6" -and $CurrentTime -eq "10") ) {
+
+StartVM_Saturday_10AM
+}
+
+
+#Calling function to Stop VM
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "5" -and $CurrentTime -eq "17") ) {
+
+StopVM_Friday_05PM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "0" -and $CurrentTime -eq "22") ) {
+
+StopVM_Sunday_10PM
+}
+
+
