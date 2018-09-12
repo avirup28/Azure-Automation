@@ -1,0 +1,19 @@
+# It will fetch the VMs, from their the VmId as per the installation script requirement and then execute PS script from your local machine
+
+
+$ResourceGroups = Get-AzureRmResourceGroup
+ 
+ForEach ($ResourceGroup in $ResourceGroups) {
+ 
+    $VMs = Get-AzureRmVM -ResourceGroupName $ResourceGroup.ResourceGroupName
+  
+    ForEach ($VM in $VMs){
+
+ 
+     $VmId = Get-AzureRmVM -ResourceGroupName $ResourceGroup.ResourceGroupName -Name $VM.Name | select Id
+
+     $localmachineScript = '<scriptname>'
+     Invoke-AzureRmVMRunCommand -ResourceGroupName $ResourceGroup.ResourceGroupName -Name $VM.Name -CommandId 'RunPowerShellScript' -ScriptPath $localmachineScript -Parameter @{"arg1" = "var1";"arg2" = "var2"} -Debug
+}
+}
+
