@@ -1,0 +1,71 @@
+param
+    (
+        [Parameter(Mandatory=$True)]
+        [string]$SubscriptionName,
+
+        [Parameter(Mandatory=$True)]
+        [string]$OutputPath
+
+     )
+
+try
+{
+    #Adding Azure Account and Subscription
+    Add-AzureRmAccount
+
+    #Selecting the Azure Subscription
+    Select-AzureRmSubscription -SubscriptionName $SubscriptionName
+
+    #Getting all Azure Resources
+    $resources = Get-AzureRMResource | Where-Object {$_.ResourceType -eq "Microsoft.Compute/virtualMachines" -or `
+                                                     $_.ResourceType -eq "microsoft.Compute/virtualMachineScaleSets" -or `
+                                                     $_.ResourceType -eq "Microsoft.SQL/servers/databases" -or `
+                                                     $_.Resourcetype -eq "Microsoft.SQL/servers"}
+    #Declaring Variables
+    $results = @()
+    $TagsAsString = ""
+
+    foreach($resource in $resources)
+    {
+        #Fetching Tags
+        $Tags = $resource.Tags
+    
+        #Checkign if tags is null or have value
+        if($Tags -ne $null)
+        {
+
+            $Tags.GetEnumerator() | % { $TagsAsString += $_.Key + ":" + $_.Value + ";" }
+        }
+        else
+        {
+            $TagsAsString = "NULL"
+        }
+        #$results = @()
+        #Adding to Results
+        $details = @{            
+                    Tags = $TagsAsString
+                    Name = $resource.Name
+                    ResourceId = $resource.ResourceId
+                    ResourceName = $resource.ResourceName
+                    ResourceType = $resource.ResourceType
+                    ResourceGroupName =$resource.ResourceGroupName
+                    Location = $resource.Location
+                    SubscriptionId = $resource.SubscriptionId 
+                    Sku = $resource.Sku
+            }                           
+            $results += New-Object PSObject -Property $details 
+
+        #Clearing Variable
+        $TagsAsString = ""
+    }
+
+    #Generating Output
+    $OutputPathWithFileName = $OutputPath + "\Tags-" + $SubscriptionName + ".csv"
+    $results | export-csv -Path $OutputPathWithFileName -NoTypeInformation
+}
+catch [system.exception]
+{
+       Write-Output "Error in generating report: $($_.Exception.Message) "
+    Write-Output "Error Details are: "
+    Write-Output $Error[0].ToString()
+} 
