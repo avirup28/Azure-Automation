@@ -1,0 +1,14 @@
+
+$csvfilepath="C:\Users\M1046504\Desktop\NA.csv"
+$VMs = import-csv $csvfilepath
+ForEach ($VM in $VMs)
+{
+
+$Name = $VM.Name
+$RG = $VM.ResourceGroupName
+$VmId = $VM.Id
+$Script = 'Wazuh.ps1'
+
+Invoke-AzureRmVMRunCommand -ResourceGroupName $RG -Name $Name -CommandId 'RunPowerShellScript' -ScriptPath $Script -Parameter @{"arg1" = "var1";"arg2" = "var2"} -Debug
+
+}
