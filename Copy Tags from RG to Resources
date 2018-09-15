@@ -1,21 +1,46 @@
 $ResourceGroups = Get-AzureRmResourceGroup
  
 ForEach ($ResourceGroup in $ResourceGroups) {
- 
-    $Resources = Find-AzureRmResource
-    
-    ForEach ($Resource in $Resources){
- 
-         $RGTags =  $ResourceGroup.Tags
-         $resourceTags = (Get-AzureRmResource -ResourceId $Resource.ResourceId).Tags
- 
-            if ($resourceTags){
-                foreach ($key in $resourceTags.Keys){
-                    if (-not($RGTags.ContainsKey($key))){
-                        $RGTags.Add($key, $resourceTags[$key])
-                }
-            }
-        Set-AzureRmResource -Tag $RGTags -ResourceId $Resource.ResourceId -Force
-    }
-}	
-} 
+
+ 
+$Resources = Get-AzureRmResource -ResourceGroupName $ResourceGroup.ResourceGroupName | Where-Object {
+
+                  $PSItem.Resourcetype -eq "Microsoft.Web/sites/instances" -or `
+                  $PSItem.Resourcetype -eq "Microsoft.Web/sites/slots/instances" -or `
+                  $PSItem.Resourcetype -eq "Microsoft.Web/serverFarms" -or `
+                  $PSItem.Resourcetype -eq "Microsoft.Web/sites" -or `
+                  $PSItem.Resourcetype -eq "Microsoft.Web/sites/slots" -or `
+                  $PSItem.Resourcetype -eq "Microsoft.Web/functions" -or `
+                  $PSItem.ResourceType -eq "Microsoft.Compute/virtualMachines" -or `
+                  $PSItem.ResourceType -eq "microsoft.Compute/virtualMachineScaleSets" -or `
+                  $PSItem.ResourceType -eq "Microsoft.SQL/servers/databases" -or `
+                  $PSItem.Resourcetype -eq "Microsoft.SQL/servers"}
+  
+ 
+  
+  Foreach ($Resource in $Resources) 
+  { 
+
+      $RGTags = $ResourceGroup.Tags
+      $Resourcetags = $Resource.Tags 
+  
+ 
+
+      if ($Resourcetags) 
+          { 
+              $RGTagFinal = @{} 
+              $RGTagFinal = $RGTags                   
+                      Foreach ($Resourcetag in $Resourcetags.GetEnumerator()) 
+                      { 
+                   
+                      If ($RGTags.Keys -inotcontains $Resourcetag.Key) 
+                          {                         
+                                  $RGTagFinal.Add($Resourcetag.Key,$Resourcetag.Value) 
+                          }   
+ 
+                      } 
+
+              Set-AzureRmResource -ResourceId $Resource.ResourceId  -Tag $RGTagFinal -Force
+          }    
+  } 
+  }
