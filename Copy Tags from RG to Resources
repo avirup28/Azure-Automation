@@ -1,46 +1,52 @@
-$ResourceGroups = Get-AzureRmResourceGroup
- 
+$ResourceGroups = Get-AzureRmResourceGroup 
+
+
 ForEach ($ResourceGroup in $ResourceGroups) {
 
- 
-$Resources = Get-AzureRmResource -ResourceGroupName $ResourceGroup.ResourceGroupName | Where-Object {
 
-                  $PSItem.Resourcetype -eq "Microsoft.Web/sites/instances" -or `
-                  $PSItem.Resourcetype -eq "Microsoft.Web/sites/slots/instances" -or `
-                  $PSItem.Resourcetype -eq "Microsoft.Web/serverFarms" -or `
-                  $PSItem.Resourcetype -eq "Microsoft.Web/sites" -or `
-                  $PSItem.Resourcetype -eq "Microsoft.Web/sites/slots" -or `
-                  $PSItem.Resourcetype -eq "Microsoft.Web/functions" -or `
-                  $PSItem.ResourceType -eq "Microsoft.Compute/virtualMachines" -or `
-                  $PSItem.ResourceType -eq "microsoft.Compute/virtualMachineScaleSets" -or `
-                  $PSItem.ResourceType -eq "Microsoft.SQL/servers/databases" -or `
-                  $PSItem.Resourcetype -eq "Microsoft.SQL/servers"}
-  
- 
-  
+    $Resources = Get-AzureRmResource -ResourceGroupName $ResourceGroup.ResourceGroupName | Where-Object {$PSItem.ResourceType -eq "Microsoft.Compute/virtualMachines"}
+
   Foreach ($Resource in $Resources) 
   { 
 
-      $RGTags = $ResourceGroup.Tags
+   write-host $Resource
+   Write-host $Resource.ResourceGroupName
+   $rgname=$Resource.ResourceGroupName
+   $rgdetails=Get-AzureRmResourceGroup -Name $rgname
+   $tags=$rgdetails.Tags
+
+
+$Resourcetags=""
+      
+  
+ 
       $Resourcetags = $Resource.Tags 
   
  
-
+ Write-host $Resourcetags
       if ($Resourcetags) 
           { 
-              $RGTagFinal = @{} 
-              $RGTagFinal = $RGTags                   
+       
+ 
+
+              $RGTagFinal = "" 
+              $RGTagFinal = $tags 
+write-host $tags                  
                       Foreach ($Resourcetag in $Resourcetags.GetEnumerator()) 
                       { 
                    
-                      If ($RGTags.Keys -inotcontains $Resourcetag.Key) 
-                          {                         
+                      If ($tags.Keys -inotcontains $Resourcetag.Key) 
+                          {  
+write-host $Resourcetag.key  
+write-host $tags.Keys                   
                                   $RGTagFinal.Add($Resourcetag.Key,$Resourcetag.Value) 
                           }   
  
                       } 
+write-host $RGTagFinal
 
               Set-AzureRmResource -ResourceId $Resource.ResourceId  -Tag $RGTagFinal -Force
+             
           }    
   } 
-  }
+  } 
