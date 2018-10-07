@@ -1,0 +1,124 @@
+$Conn = Get-AutomationConnection -Name AzureRunAsConnection
+Add-AzureRMAccount -ServicePrincipal -Tenant $Conn.TenantID `
+-ApplicationID $Conn.ApplicationID -CertificateThumbprint $Conn.CertificateThumbprint
+
+
+function Teradata {
+
+Get-AzureRmRecoveryServicesVault -Name <name>  | Set-AzureRmRecoveryServicesVaultContext
+
+
+$Fs = Get-AzureRmRecoveryservicesBackupJob | Where-Object {$PSItem.Status -eq "Failed" -and $PSItem.StartTime -ge $currenttime}
+
+if ($Fs) {
+
+foreach ($F in $Fs) {
+
+$VM = $F.WorkLoadName
+
+Write-Host "Backup is getting initiated for $VM in Teradata vault"
+
+
+$backupcontainer = Get-AzureRmRecoveryServicesBackupContainer `
+    -ContainerType "AzureVM" `
+    -FriendlyName "$VM" `
+    -Status Registered
+
+$item = Get-AzureRmRecoveryServicesBackupItem `
+    -Container $backupcontainer `
+    -WorkloadType "AzureVm"
+
+Backup-AzureRmRecoveryServicesBackupItem -Item $item
+                     }
+                  }
+        
+else { Write-Host "There is no VM currently in failed state for Terdata vault" }
+                }
+                
+
+
+
+
+
+function Mindtree {
+
+Get-AzureRmRecoveryServicesVault -Name <name>  | Set-AzureRmRecoveryServicesVaultContext
+
+
+if ($Fs) {
+
+foreach ($F in $Fs) {
+
+$VM = $F.WorkLoadName
+
+Write-Host "Backup is getting initiated for $VM in Mindtree vault"
+
+
+$backupcontainer = Get-AzureRmRecoveryServicesBackupContainer `
+    -ContainerType "AzureVM" `
+    -FriendlyName "$VM" `
+    -Status Registered
+
+$item = Get-AzureRmRecoveryServicesBackupItem `
+    -Container $backupcontainer `
+    -WorkloadType "AzureVm"
+
+Backup-AzureRmRecoveryServicesBackupItem -Item $item
+                     }
+                  }
+        
+else { Write-Host "There is no VM currently in failed state for Mindtree vault" }
+                }
+                
+
+
+
+
+function Proximity {
+
+Get-AzureRmRecoveryServicesVault -Name <name>  | Set-AzureRmRecoveryServicesVaultContext
+
+
+$Fs = Get-AzureRmRecoveryservicesBackupJob | Where-Object {$PSItem.Status -eq "Failed" -and $PSItem.StartTime -ge $currenttime}
+
+if ($Fs) {
+
+foreach ($F in $Fs) {
+
+$VM = $F.WorkLoadName
+
+Write-Host "Backup is getting initiated for $VM in Proximity vault"
+
+
+$backupcontainer = Get-AzureRmRecoveryServicesBackupContainer `
+    -ContainerType "AzureVM" `
+    -FriendlyName "$VM" `
+    -Status Registered
+
+$item = Get-AzureRmRecoveryServicesBackupItem `
+    -Container $backupcontainer `
+    -WorkloadType "AzureVm"
+
+Backup-AzureRmRecoveryServicesBackupItem -Item $item
+                     }
+                  }
+        
+else { Write-Host "There is no VM currently in failed state for Proximity vault" }
+                 }
+                
+
+
+$Hour = (Get-Date).Hour
+
+$currenttime = (Get-Date).AddHours(-12)
+
+
+
+if ($Hour -eq "0") { Teradata }
+if ($Hour -eq "12") { Teradata }
+
+if ($Hour -eq "4") { Mindtree }
+if ($Hour -eq "16") { Mindtree }
+
+if ($Hour -eq "8") { Proximity }
+if ($Hour -eq "20") { Proximity }
