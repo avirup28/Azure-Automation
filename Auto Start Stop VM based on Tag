@@ -1,3 +1,4 @@
+
 # Input Parameters for
 # VmAction:action to perform (Start or Stop)
 # VMAction parameter is Mandatory
@@ -38,101 +39,1034 @@ catch {
 
 <# 
 
-     Getting the Current time and date, Timezone is in CST
+     Getting the Current time and date, Timezone is in SGT
      By Default, Sunday = 0 ; Monday = 1 ; ... ; Saturday = 6
 
 #>
 
-#Converting UTC timezone to CST
+#Converting UTC timezone to SGT
 
 
-$CSTZONE = [System.TimeZoneInfo]::FindSystemTimeZoneById("Central Standard Time")
-$CSTTIME = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $CSTZONE)
+$SGTZONE = [System.TimeZoneInfo]::FindSystemTimeZoneById("Singapore Standard Time")
+$SGTTIME = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $SGTZONE)
 
 
 #Reading Current Date and Time
 
-$CurrentDay = $CSTTIME.DayOfWeek.value__
-$CurrentTime = $CSTTIME.Hour
+$CurrentDay = $SGTTIME.DayOfWeek.value__
+$CurrentTime = $SGTTIME.Hour
 
 
 #Defining Functions which will Start VM
 
 
 
-function StartVM_Monday_08AM {
+
+function StartSunday6AM {
 
 
 [array]$VMsStart = Get-AzureRMVm -Status | 
-Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "5_1_17_08" `
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_06" `
 -and $PSItem.PowerState -eq "VM deallocated"}                                                                     
 
-ForEach ($VMStart in $VMsStart)
+ForEach ($VMStart in $VMsStart) 
 {
- 
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '0')
+ {
 
 
     Write-Output "Starting: $($VMStart.Name)"
     Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Sunday"}
+
 }
-}
 
-
-
-function StartVM_Saturday_10AM {
+                }
+				
+				
+				
+function StartMonday6AM {
 
 
 [array]$VMsStart = Get-AzureRMVm -Status | 
-Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "0_6_22_10" `
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_06" `
 -and $PSItem.PowerState -eq "VM deallocated"}                                                                     
 
-ForEach ($VMStart in $VMsStart)
+ForEach ($VMStart in $VMsStart) 
 {
- 
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '1')
+ {
 
 
     Write-Output "Starting: $($VMStart.Name)"
     Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Monday"}
+
 }
+
+                }
+				
+				
+				
+				
+function StartTuesday6AM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_06" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '2')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Tuesday"}
+
 }
+
+                }
+				
+				
+				
+				
+function StartWednesday6AM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_06" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '3')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Wednesday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartThursday6AM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_06" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '4')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Thursday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartFriday6AM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_06" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '5')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Friday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartSaturday6AM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_06" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '6')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Saturday"}
+
+}
+
+                }
+
+
+
+
+
+function StartSunday10PM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_22" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '0')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Sunday"}
+
+}
+
+                }
+				
+				
+				
+function StartMonday10PM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_22" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '1')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Monday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartTuesday10PM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_22" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '2')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Tuesday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartWednesday10PM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_22" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '3')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Wednesday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartThursday10PM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_22" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '4')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Thursday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartFriday10PM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_22" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '5')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Friday"}
+
+}
+
+                }
+				
+				
+				
+				
+function StartSaturday10PM {
+
+
+[array]$VMsStart = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_*_22" `
+-and $PSItem.PowerState -eq "VM deallocated"}                                                                     
+
+ForEach ($VMStart in $VMsStart) 
+{
+
+$VM = $VMStart.Name
+$RG = $VMStart.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StartDay = ($Value -split '_')[1]
+
+if ($StartDay -match '6')
+ {
+
+
+    Write-Output "Starting: $($VMStart.Name)"
+    Start-AzureRMVM -Name $VMStart.Name -ResourceGroupName $VMStart.ResourceGroupName
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Start on Saturday"}
+
+}
+
+                }
 
 
 
 #Defining Functions which will Stop VM
 
+#Stop 6AM
 
-function StopVM_Friday_05PM {
-
+function StopSunday6AM {
 
 [array]$VMsStop = Get-AzureRMVm -Status | 
-Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "5_1_17_08" `
--and $PSItem.PowerState -eq "VM running"}
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_06_*" `
+-and $PSItem.PowerState -eq "VM Running"}
 
 ForEach ($VMStop in $VMsStop) 
 {
 
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '0')
+ {
+
 
     Write-Output "Shutting down: $($VMStop.Name)"
     Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
-}  
-} 
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Sunday"}
+
+}
+
+                }
 
 
-function StopVM_Sunday_10PM {
-
+function StopMonday6AM {
 
 [array]$VMsStop = Get-AzureRMVm -Status | 
-Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -eq "0_6_22_10" `
--and $PSItem.PowerState -eq "VM running"}
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_06_*" `
+-and $PSItem.PowerState -eq "VM Running"}
 
 ForEach ($VMStop in $VMsStop) 
 {
 
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '1')
+ {
+
 
     Write-Output "Shutting down: $($VMStop.Name)"
     Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
-}  
-} 
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Monday"}
+
+}
+
+                    }
+
+function StopTuesday6AM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_06_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '2')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Tuesday"}
+
+}
+
+                }
+
+
+function StopWednesday6AM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_06_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '3')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Wednesday"}
+
+}
+
+                    }
+
+
+
+function StopThursday6AM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_06_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '4')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Thursday"}
+
+}
+
+                    }
+
+
+function StopFriday6AM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_06_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '5')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Friday"}
+
+}
+
+                    }
+
+
+function StopSaturday6AM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_06_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '6')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Saturday"}
+
+}
+
+                    }
+
+
+
+#Stop 10PM
+
+function StopSunday10PM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_22_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '0')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Sunday"}
+
+}
+
+                }
+
+
+function StopMonday10PM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_22_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '1')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Monday"}
+
+}
+
+                    }
+
+function StopTuesday10PM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_22_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '2')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Tuesday"}
+
+}
+
+                }
+
+
+function StopWednesday10PM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_22_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '3')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Wednesday"}
+
+}
+
+                    }
+
+
+
+function StopThursday10PM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_22_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '4')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Thursday"}
+
+}
+
+                    }
+
+
+function StopFriday10PM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_22_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '5')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Friday"}
+
+}
+
+                    }
+
+
+function StopSaturday10PM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_22_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '6')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Saturday"}
+
+}
+
+                    }
+
+
+#Stop 2AM Saturday
+
+
+function StopSaturday2AM {
+
+[array]$VMsStop = Get-AzureRMVm -Status | 
+Where-Object {$PSItem.Tags.Keys -eq "Auto_Shutdown" -and $PSItem.Tags.Values -like "*_*_02_*" `
+-and $PSItem.PowerState -eq "VM Running"}
+
+ForEach ($VMStop in $VMsStop) 
+{
+
+$VM = $VMStop.Name
+$RG = $VMStop.ResourceGroupName
+
+$Tag = (Get-AzureRmVM -Name $VM -ResourceGroupName $RG).Tags
+$Value = $Tag.Auto_Shutdown
+
+$StopDay = ($Value -split '_')[0]
+
+if ($StopDay -match '6')
+ {
+
+
+    Write-Output "Shutting down: $($VMStop.Name)"
+    Stop-AzureRMVM -Name $VMStop.Name -ResourceGroupName $VMStop.ResourceGroupName -Force
+
+ }
+
+ else { Write-Output "$VM is not scheduled to Stop on Saturday"}
+
+}
+
+                    }
 
 
 
@@ -143,28 +1077,169 @@ ForEach ($VMStop in $VMsStop)
 #Calling function to Start VM
 
 
-if ($VmAction -eq "Start" -and ($CurrentDay -eq "1" -and $CurrentTime -eq "8") ) {
+#Start at 6AM
 
-StartVM_Monday_08AM
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "0" -and $CurrentTime -eq "6") ) {
+
+StartSunday6AM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "1" -and $CurrentTime -eq "6") ) {
+
+StartMonday6AM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "2" -and $CurrentTime -eq "6") ) {
+
+StartTuesday6AM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "3" -and $CurrentTime -eq "6") ) {
+
+StartWednesday6AM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "4" -and $CurrentTime -eq "6") ) {
+
+StartThursday6AM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "5" -and $CurrentTime -eq "6") ) {
+
+StartFriday6AM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "6" -and $CurrentTime -eq "6") ) {
+
+StartSaturday6AM
 }
 
 
-if ($VmAction -eq "Start" -and ($CurrentDay -eq "6" -and $CurrentTime -eq "10") ) {
+#Start at 10PM
 
-StartVM_Saturday_10AM
+
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "0" -and $CurrentTime -eq "22") ) {
+
+StartSunday10PM
 }
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "1" -and $CurrentTime -eq "22") ) {
+
+StartMonday10PM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "2" -and $CurrentTime -eq "22") ) {
+
+StartTuesday10PM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "3" -and $CurrentTime -eq "22") ) {
+
+StartWednesday10PM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "4" -and $CurrentTime -eq "22") ) {
+
+StartThursday10PM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "5" -and $CurrentTime -eq "22") ) {
+
+StartFriday10PM
+}
+
+if ($VmAction -eq "Start" -and ($CurrentDay -eq "6" -and $CurrentTime -eq "22") ) {
+
+StartSaturday10PM
+}
+
+
 
 
 #Calling function to Stop VM
 
-if ($VmAction -eq "Stop" -and ($CurrentDay -eq "5" -and $CurrentTime -eq "17") ) {
 
-StopVM_Friday_05PM
+#Stop at 6AM
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "0" -and $CurrentTime -eq "6") ) {
+
+StopSunday6AM
 }
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "1" -and $CurrentTime -eq "6") ) {
+
+StopMonday6AM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "2" -and $CurrentTime -eq "6") ) {
+
+StopTuesday6AM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "3" -and $CurrentTime -eq "6") ) {
+
+StopWednesday6AM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "4" -and $CurrentTime -eq "6") ) {
+
+StopThursday6AM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "5" -and $CurrentTime -eq "6") ) {
+
+StopFriday6AM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "6" -and $CurrentTime -eq "6") ) {
+
+StopSaturday6AM
+}
+
+
+#Stop at 2AM(saturday)
+
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "6" -and $CurrentTime -eq "2") ) {
+
+StopSaturday2AM
+}
+
+
+#Stop at 10PM
 
 if ($VmAction -eq "Stop" -and ($CurrentDay -eq "0" -and $CurrentTime -eq "22") ) {
 
-StopVM_Sunday_10PM
+StopSunday10PM
 }
 
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "1" -and $CurrentTime -eq "22") ) {
 
+StopMonday10PM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "2" -and $CurrentTime -eq "22") ) {
+
+StopTuesday10PM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "3" -and $CurrentTime -eq "22") ) {
+
+StopWednesday10PM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "4" -and $CurrentTime -eq "22") ) {
+
+StopThursday10PM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "5" -and $CurrentTime -eq "22") ) {
+
+StopFriday10PM
+}
+
+if ($VmAction -eq "Stop" -and ($CurrentDay -eq "6" -and $CurrentTime -eq "22") ) {
+
+StopSaturday10PM
+}
