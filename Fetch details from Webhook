@@ -1,0 +1,51 @@
+param
+(
+[Parameter (Mandatory = $True)]
+[object] $WebhookData
+)
+
+$connectionName = "AzureRunAsConnection"
+try
+{
+    # Get the connection "AzureRunAsConnection "
+    $servicePrincipalConnection=Get-AutomationConnection -Name $connectionName         
+
+    "Logging in to Azure..."
+    Add-AzureRmAccount `
+        -ServicePrincipal `
+        -TenantId $servicePrincipalConnection.TenantId `
+        -ApplicationId $servicePrincipalConnection.ApplicationId `
+        -CertificateThumbprint $servicePrincipalConnection.CertificateThumbprint 
+}
+catch {
+    if (!$servicePrincipalConnection)
+    {
+        $ErrorMessage = "Connection $connectionName not found."
+        throw $ErrorMessage
+    } else{
+        Write-Error -Message $_.Exception
+        throw $_.Exception
+    }
+}
+
+
+
+if ($WebhookData) {
+
+$abc=ConvertFrom-Json -InputObject $WebhookData
+$EP =$abc.RequestBody
+Write-Output "$EP"
+
+$converted=$abc.RequestBody | ConvertFrom-Json
+$ResourceName=$converted.context.resourceName
+$ResourceGroupName=$converted.context.resourceGroupName
+$ResourceId=$converted.context.resourceId
+
+Write-Output "$ResourceName"
+Write-Output "$ResourceGroupName"
+Write-Output "$ResourceId"
+
+}
+
+
+Webhook = {"WebhookName":"wbhk","RequestBody":"{\"status\":\"Activated\",\"context\":{\"condition\":{\"metricName\":\"dtu_consumption_percent\",\"metricUnit\":\"Percent\",\"metricValue\":\"0.0221451612903226\",\"threshold\":\"0\",\"windowSize\":\"30\",\"timeAggregation\":\"Average\",\"operator\":\"GreaterThan\"},\"resourceName\":\"epsrvr01/ep01\",\"resourceType\":\"microsoft.sql/servers/elasticpools\",\"resourceRegion\":\"eastus\",\"portalLink\":\"______https://portal.azure.com/#resource/subscriptions/0dea126b-1d74-4630-ba11-90a4c6e6b961/resourceGroups/RG1/providers/Microsoft.Sql/servers/epsrvr01/elasticpools/EP01\",\"timestamp\":\"2018-10-17T05:39:49.8329192Z\",\"id\":\"/subscriptions/0dea126b-1d74-4630-ba11-90a4c6e6b961/resourceGroups/rg1/providers/microsoft.insights/alertrules/dtu1\",\"name\":\"dtu1\",\"description\":\"dtu\",\"conditionType\":\"Metric\",\"subscriptionId\":\"0dea126b-1d74-4630-ba11-90a4c6e6b961\",\"resourceId\":\"/subscriptions/0dea126b-1d74-4630-ba11-90a4c6e6b961/resourceGroups/RG1/providers/Microsoft.Sql/servers/epsrvr01/elasticpools/EP01\",\"resourceGroupName\":\"rg1\"},\"properties\":{\"$type\":\"Microsoft.WindowsAzure.Management.Common.Storage.CasePreservedDictionary`1[[System.String, mscorlib]], Microsoft.WindowsAzure.Management.Common.Storage\"}}","RequestHeader":{"Connection":"Keep-Alive","Host":"s1events.azure-automation.net","User-Agent":"azure-insights/0.9","x-ms-request-id":"80ebc2b2-0eb0-4c7d-81e3-5a4cded40112"}}
