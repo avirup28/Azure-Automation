@@ -1,0 +1,923 @@
+	$Conn = Get-AutomationConnection -Name AzureRunAsConnection
+	Add-AzureRMAccount -ServicePrincipal -Tenant $Conn.TenantID `
+-ApplicationID $Conn.ApplicationID -CertificateThumbprint $Conn.CertificateThumbprint
+
+
+#Tag Format = Day,StopHours,StartHours , Ex = Mo,08,14
+
+#Getting UTC time
+
+$UTCTIME = [System.DateTime]::UtcNow
+
+#Reading Current Date and Time
+
+$CurrentDay = $UTCTIME.DayOfWeek.value__
+$CurrentTime = $UTCTIME.Hour
+
+Write-Output "Day : $CurrentDay , Time : $CurrentTime"
+
+##Get list of VMs to shutdown
+
+$deallocatedVMs = Get-AzureRMVm -Status | Where-Object {$PSItem.Tags.Keys -eq "AutoShutdown" -and $PSItem.PowerState -eq "VM deallocated"}
+
+Write-Output "Stopped VM : $($deallocatedVMs.Name)"
+
+#ForEach VM do action Start
+
+
+ForEach ($VMtoStart in $deallocatedVMs) {
+
+$AutoShutdown = $VMtoStart.Tags.AutoShutdown | ConvertFrom-String -Delimiter ","
+
+    If ($AutoShutdown) {
+
+    #Get days
+    $Day1 = $AutoShutdown.P1
+    $Day2 = $AutoShutdown.P4
+    $Day3 = $AutoShutdown.P7
+    $Day4 = $AutoShutdown.P10
+    $Day5 = $AutoShutdown.P13
+    $Day6 = $AutoShutdown.P16
+    $Day7 = $AutoShutdown.P19
+
+    #Start hours
+
+    $Day1Start = $AutoShutdown.P3
+    $Day2Start = $AutoShutdown.P6
+    $Day3Start = $AutoShutdown.P9
+    $Day4Start = $AutoShutdown.P12
+    $Day5Start = $AutoShutdown.P15
+    $Day6Start = $AutoShutdown.P18
+    $Day7Start = $AutoShutdown.P21
+
+        #Monday Start
+
+        If ($Day1 -eq "mo") {
+        
+            If (($Day1Start -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+            
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+           
+        }
+
+        If ($Day2 -eq "mo") {
+        
+            If (($Day2Start -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day3 -eq "mo") {
+        
+            If (($Day3Start -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                           
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day4 -eq "mo") {
+        
+            If (($Day4Start -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day5 -eq "mo") {
+        
+            If (($Day5Start -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+            
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day6 -eq "mo") {
+        
+            If (($Day6Start -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day7 -eq "mo") {
+        
+            If (($Day7Start -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+            
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        #Tuesday Start
+
+        If ($Day1 -eq "tu") {
+        
+            If (($Day1Start -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        
+        }
+
+        If ($Day2 -eq "tu") {
+        
+            If (($Day2Start -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+            
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day3 -eq "tu") {
+        
+            If (($Day3Start -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day4 -eq "tu") {
+        
+            If (($Day4Start -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day5 -eq "tu") {
+        
+            If (($Day5Start -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day6 -eq "tu") {
+        
+            If (($Day6Start -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day7 -eq "tu") {
+        
+            If (($Day7Start -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        #Wednesday Start
+
+        If ($Day1 -eq "we") {
+        
+            If (($Day1Start -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        
+        }
+
+        If ($Day2 -eq "we") {
+        
+            If (($Day2Start -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day3 -eq "we") {
+        
+            If (($Day3Start -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day4 -eq "we") {
+        
+            If (($Day4Start -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day5 -eq "we") {
+        
+            If (($Day5Start -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day6 -eq "we") {
+        
+            If (($Day6Start -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day7 -eq "we") {
+        
+            If (($Day7Start -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        #Thursday Start
+
+        If ($Day1 -eq "th") {
+        
+            If (($Day1Start -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        
+        }
+
+        If ($Day2 -eq "th") {
+        
+            If (($Day2Start -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day3 -eq "th") {
+        
+            If (($Day3Start -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day4 -eq "th") {
+        
+            If (($Day4Start -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day5 -eq "th") {
+        
+            If (($Day5Start -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day6 -eq "th") {
+        
+            If (($Day6Start -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day7 -eq "th") {
+        
+            If (($Day7Start -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        #Friday Start
+
+        If ($Day1 -eq "fr") {
+        
+            If (($Day1Start -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        
+        }
+
+        If ($Day2 -eq "fr") {
+        
+            If (($Day2Start -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day3 -eq "fr") {
+        
+            If (($Day3Start -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day4 -eq "fr") {
+        
+            If (($Day4Start -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day5 -eq "fr") {
+        
+            If (($Day5Start -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day6 -eq "fr") {
+        
+            If (($Day6Start -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day7 -eq "fr") {
+        
+            If (($Day7Start -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        #Saturday Start
+
+        If ($Day1 -eq "sa") {
+        
+            If (($Day1Start -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        
+        }
+
+        If ($Day2 -eq "sa") {
+        
+            If (($Day2Start -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day3 -eq "sa") {
+        
+            If (($Day3Start -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day4 -eq "sa") {
+        
+            If (($Day4Start -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day5 -eq "sa") {
+        
+            If (($Day5Start -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day6 -eq "sa") {
+        
+            If (($Day6Start -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day7 -eq "sa") {
+        
+            If (($Day7Start -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        #Sunday Start
+
+        If ($Day1 -eq "su") {
+        
+            If (($Day1Start -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        
+        }
+
+        If ($Day2 -eq "su") {
+        
+            If (($Day2Start -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day3 -eq "su") {
+        
+            If (($Day3Start -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day4 -eq "su") {
+        
+            If (($Day4Start -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day5 -eq "su") {
+        
+            If (($Day5Start -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day6 -eq "su") {
+        
+            If (($Day6Start -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+        If ($Day7 -eq "su") {
+        
+            If (($Day7Start -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                        
+            Write-Output "Starting VM : $($VMtoStart.Name)"
+            Start-AzureRMVM -Name $VMtoStart.Name -ResourceGroupName $VMtoStart.ResourceGroupName}
+        }
+
+    }
+
+}
+
+#Get list of VMs to shutdown
+
+$RunningVMs = Get-AzureRMVm -Status | Where-Object {$PSItem.Tags.Keys -eq "AutoShutdown" -and $PSItem.PowerState -eq "VM Running"}
+
+Write-Output "Running VM : $($RunningVMs.Name)"
+
+
+
+#ForEach VM do action Stop
+
+ForEach ($VMtoStop in $RunningVMs) {
+
+$AutoShutdown = $VMtoStop.Tags.AutoShutdown | ConvertFrom-String -Delimiter ","
+
+    If ($AutoShutdown) {
+
+    #Get days
+    $Day1 = $AutoShutdown.P1
+    $Day2 = $AutoShutdown.P4
+    $Day3 = $AutoShutdown.P7
+    $Day4 = $AutoShutdown.P10
+    $Day5 = $AutoShutdown.P13
+    $Day6 = $AutoShutdown.P16
+    $Day7 = $AutoShutdown.P19
+
+    #Stop hours
+
+    $Day1Shutdown = $AutoShutdown.P2
+    $Day2Shutdown = $AutoShutdown.P5    
+    $Day3Shutdown = $AutoShutdown.P8    
+    $Day4Shutdown = $AutoShutdown.P11    
+    $Day5Shutdown = $AutoShutdown.P14    
+    $Day6Shutdown = $AutoShutdown.P17    
+    $Day7Shutdown = $AutoShutdown.P20
+
+        #Monday Stop
+
+        If ($Day1 -eq "mo") {
+        
+            If (($Day1Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                        
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        
+        }
+
+        If ($Day2 -eq "mo") {
+        
+            If (($Day2Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day3 -eq "mo") {
+        
+            If (($Day3Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day4 -eq "mo") {
+        
+            If (($Day4Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day5 -eq "mo") {
+        
+            If (($Day5Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day6 -eq "mo") {
+        
+            If (($Day6Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day7 -eq "mo") {
+        
+            If (($Day7Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "1")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        #Tuesday Stop
+
+        If ($Day1 -eq "tu") {
+        
+            If (($Day1Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        
+        }
+
+        If ($Day2 -eq "tu") {
+        
+            If (($Day2Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                          
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day3 -eq "tu") {
+        
+            If (($Day3Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day4 -eq "tu") {
+        
+            If (($Day4Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day5 -eq "tu") {
+        
+            If (($Day5Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day6 -eq "tu") {
+        
+            If (($Day6Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day7 -eq "tu") {
+        
+            If (($Day7Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "2")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        #Wednesday Stop
+
+        If ($Day1 -eq "we") {
+        
+            If (($Day1Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        
+        }
+
+        If ($Day2 -eq "we") {
+        
+            If (($Day2Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day3 -eq "we") {
+        
+            If (($Day3Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day4 -eq "we") {
+        
+            If (($Day4Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day5 -eq "we") {
+        
+            If (($Day5Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day6 -eq "we") {
+        
+            If (($Day6Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day7 -eq "we") {
+        
+            If (($Day7Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "3")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        #Thursday Stop
+
+        If ($Day1 -eq "th") {
+        
+            If (($Day1Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        
+        }
+
+        If ($Day2 -eq "th") {
+        
+            If (($Day2Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day3 -eq "th") {
+        
+            If (($Day3Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day4 -eq "th") {
+        
+           If (($Day4Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                                     
+           Write-Output "Stopping VM : $($VMtoStop.Name)"
+           Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day5 -eq "th") {
+        
+            If (($Day5Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day6 -eq "th") {
+        
+            If (($Day6Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day7 -eq "th") {
+        
+           If (($Day7Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "4")) {
+                                     
+           Write-Output "Stopping VM : $($VMtoStop.Name)"
+           Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        #Friday Stop
+
+        If ($Day1 -eq "fr") {
+        
+           If (($Day1Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                                     
+           Write-Output "Stopping VM : $($VMtoStop.Name)"
+           Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        
+        }
+
+        If ($Day2 -eq "fr") {
+        
+            If (($Day2Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day3 -eq "fr") {
+        
+            If (($Day3Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day4 -eq "fr") {
+        
+            If (($Day4Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day5 -eq "fr") {
+        
+            If (($Day5Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day6 -eq "fr") {
+        
+            If (($Day6Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day7 -eq "fr") {
+        
+            If (($Day7Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "5")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        #Saturday Stop
+
+        If ($Day1 -eq "sa") {
+        
+            If (($Day1Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        
+        }
+
+        If ($Day2 -eq "sa") {
+        
+            If (($Day2Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day3 -eq "sa") {
+        
+            If (($Day3Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day4 -eq "sa") {
+        
+            If (($Day4Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day5 -eq "sa") {
+        
+            If (($Day5Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day6 -eq "sa") {
+        
+            If (($Day6Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day7 -eq "sa") {
+        
+            If (($Day7Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "6")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        #Sunday Stop
+
+        If ($Day1 -eq "su") {
+        
+            If (($Day1Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        
+        }
+
+        If ($Day2 -eq "su") {
+        
+            If (($Day2Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day3 -eq "su") {
+        
+            If (($Day3Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day4 -eq "su") {
+        
+            If (($Day4Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day5 -eq "su") {
+        
+            If (($Day5Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day6 -eq "su") {
+        
+            If (($Day6Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+        If ($Day7 -eq "su") {
+        
+            If (($Day7Shutdown -eq $CurrentTime) -and ($CurrentDay -eq "0")) {
+                                      
+            Write-Output "Stopping VM : $($VMtoStop.Name)"
+            Stop-AzureRMVM -Name $VMtoStop.Name -ResourceGroupName $VMtoStop.ResourceGroupName -Force}
+        }
+
+    }
+
+}
