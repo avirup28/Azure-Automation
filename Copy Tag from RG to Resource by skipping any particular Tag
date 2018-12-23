@@ -1,0 +1,55 @@
+
+	$Conn = Get-AutomationConnection -Name AzureRunAsConnection
+	Add-AzureRMAccount -ServicePrincipal -Tenant $Conn.TenantID `
+-ApplicationID $Conn.ApplicationID -CertificateThumbprint $Conn.CertificateThumbprint
+
+$ResourceGroups = Get-AzureRmResourceGroup 
+
+
+ForEach ($ResourceGroup in $ResourceGroups) {
+
+
+    $Resources = Get-AzureRmResource -ResourceGroupName $ResourceGroup.ResourceGroupName | Where-Object {
+
+                  $PSItem.ResourceType -eq "Microsoft.Compute/virtualMachines" -or `
+                  $PSItem.ResourceType -eq "microsoft.Compute/virtualMachineScaleSets" -or `
+                  $PSItem.ResourceType -eq "Microsoft.SQL/servers/databases" -or `
+                  $PSItem.Resourcetype -eq "Microsoft.SQL/servers"}
+
+  Foreach ($Resource in $Resources) 
+  { 
+
+  Write-Output "Performing action for $($Resource.Name) in Resource Group $($Resource.ResourceGroupName)"
+ 
+ 
+   $rgdetails=Get-AzureRmResourceGroup -Name $Resource.ResourceGroupName
+   $tags=$rgdetails.Tags
+
+if ($tags.Keys -contains "Description") { $tags.Remove('Description') }
+
+$Resourcetags=""
+      
+$Resourcetags = $Resource.Tags 
+  
+      if ($Resourcetags) 
+          { 
+       
+              $RGTagFinal = "" 
+              $RGTagFinal = $tags 
+                  
+                      Foreach ($Resourcetag in $Resourcetags.GetEnumerator()) 
+                      { 
+                   
+                      If ($tags.Keys -inotcontains $Resourcetag.Key) 
+                          {  
+                 
+                                  $RGTagFinal.Add($Resourcetag.Key,$Resourcetag.Value) 
+                          }   
+ 
+                      } 
+
+              Set-AzureRmResource -ResourceId $Resource.ResourceId  -Tag $RGTagFinal -Force
+             
+          }    
+  } 
+  } 
